@@ -44,14 +44,14 @@ function handleImageError() {
                     </p>
                     <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                         <div class="rounded-md shadow">
-                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                            <Link :href="route('login')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
                                 Start Investing
-                            </a>
+                            </Link>
                         </div>
                         <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                            <Link :href="route('AboutUs')" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
                                 Learn More
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -168,13 +168,13 @@ function handleImageError() {
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</a>
+                        <Link :href="route('dashboard')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</Link>
                     </div>
 
-                    <!-- Pro Plan -->
+                    <!-- Gold Plan -->
                     <div class="relative p-8 bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col">
                         <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-gray-900">Professional</h3>
+                            <h3 class="text-xl font-semibold text-gray-900">Gold</h3>
                             <p class="mt-4 flex items-baseline text-gray-900">
                                 <span class="text-5xl font-extrabold tracking-tight">$500</span>
                                 <span class="ml-1 text-xl font-semibold">min</span>
@@ -207,13 +207,13 @@ function handleImageError() {
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" class="bg-indigo-600 text-white hover:bg-indigo-700 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</a>
+                        <Link :href="route('dashboard')" class="bg-indigo-600 text-white hover:bg-indigo-700 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</Link>
                     </div>
 
-                    <!-- Gold Plan -->
+                    <!-- Platinum Plan -->
                     <div class="relative p-8 bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col">
                         <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-gray-900">Gold</h3>
+                            <h3 class="text-xl font-semibold text-gray-900">Platinum</h3>
                             <p class="mt-4 flex items-baseline text-gray-900">
                                 <span class="text-5xl font-extrabold tracking-tight">$2,000</span>
                                 <span class="ml-1 text-xl font-semibold">min</span>
@@ -252,13 +252,13 @@ function handleImageError() {
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</a>
+                        <Link :href="route('dashboard')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</Link>
                     </div>
 
-                    <!-- Platinum Plan -->
+                    <!-- Professional Plan -->
                     <div class="relative p-8 bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col">
                         <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-gray-900">Platinum</h3>
+                            <h3 class="text-xl font-semibold text-gray-900">Professional</h3>
                             <p class="mt-4 flex items-baseline text-gray-900">
                                 <span class="text-5xl font-extrabold tracking-tight">$10,000</span>
                                 <span class="ml-1 text-xl font-semibold">min</span>
@@ -303,7 +303,7 @@ function handleImageError() {
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</a>
+                        <Link :href="route('dashboard')" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium">Get started</Link>
                     </div>
                 </div>
             </div>
