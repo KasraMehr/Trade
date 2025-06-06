@@ -307,9 +307,9 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                 <p class="mt-4 text-lg leading-6 text-indigo-200">
                     Join thousands of investors who trust us with their cryptocurrency portfolios.
                 </p>
-                <a href="#" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 sm:w-auto">
+                <Link :href="route('home')" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 sm:w-auto">
                     View Investment Plans
-                </a>
+                </Link>
             </div>
         </div>
 
