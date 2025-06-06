@@ -11,12 +11,12 @@ import MainLayout from '@/Layouts/MainLayout.vue';
         <h1 class="text-4xl md:text-5xl font-bold mb-6">Smart Investment Solutions</h1>
         <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Let our experts grow your capital with professional asset management strategies</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <router-link to="/register" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 transform hover:scale-105">
+          <Link :href="route('dashboard')"class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 transform hover:scale-105">
             Get Started
-          </router-link>
-          <router-link to="/how-it-works" class="bg-transparent border-2 border-white hover:bg-white hover:bg-opacity-10 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300">
+          </Link>
+          <Link :href="route('AboutUs')" class="bg-transparent border-2 border-white hover:bg-white hover:bg-opacity-10 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300">
             Learn More
-          </router-link>
+          </Link>
         </div>
       </div>
     </section>
@@ -236,12 +236,12 @@ import MainLayout from '@/Layouts/MainLayout.vue';
         <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Start Investing?</h2>
         <p class="text-xl mb-8 max-w-3xl mx-auto">Join thousands of investors who trust us with their capital growth</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <router-link to="/register" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 transform hover:scale-105">
+          <Link :href="route('dashboard')" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300 transform hover:scale-105">
             Open Account
-          </router-link>
-          <router-link to="/contact" class="bg-transparent border-2 border-white hover:bg-white hover:bg-opacity-10 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300">
+          </Link>
+          <Link :href="route('AboutUs')" class="bg-transparent border-2 border-white hover:bg-white hover:bg-opacity-10 px-8 py-3 rounded-lg font-semibold text-lg transition duration-300">
             Contact Us
-          </router-link>
+          </Link>
         </div>
       </div>
     </section>
