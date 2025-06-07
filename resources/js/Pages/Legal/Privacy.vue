@@ -8,17 +8,17 @@ import MainLayout from '@/Layouts/MainLayout.vue';
     <MainLayout>
 
       <div>
-        <div class="privacy-policy p-8 max-w-5xl mx-auto leading-relaxed text-gray-800">
-          <h1 class="text-4xl font-bold mb-6">Privacy Policy</h1>
+        <div class="privacy-policy p-8 max-w-5xl mx-auto leading-relaxed text-gray-400">
+          <h1 class="text-4xl font-bold text-gray-200 mb-6">Privacy Policy</h1>
 
           <section v-for="(section, index) in policySections" :key="index" class="mb-6">
-            <h2 class="text-2xl font-semibold mb-2">{{ section.title }}</h2>
-            <div v-for="(para, idx) in section.content" :key="idx" class="mb-3">
+            <h2 class="text-2xl text-gray-300 font-semibold mb-2">{{ section.title }}</h2>
+            <div v-for="(para, idx) in section.content" :key="idx" class="text-gray-400 mb-3">
               <p>{{ para }}</p>
             </div>
           </section>
 
-          <p class="text-sm text-gray-500">Last updated: June 2025</p>
+          <p class="text-sm text-gray-300">Last updated: June 2025</p>
         </div>
       </div>
     </MainLayout>
