@@ -139,48 +139,33 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                     <div class="space-y-8">
                         <div class="relative pl-10 group animate-fade-in-delayed">
                             <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
-                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2018</div>
-                            <div class="mt-1 text-white">
-                                <p>Founded with a team of 5 crypto experts</p>
-                                <p class="mt-2 text-gray-300">Launched our first trading algorithm</p>
-                            </div>
-                        </div>
-                        <div class="relative pl-10 group animate-fade-in-delayed">
-                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
-                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2019</div>
-                            <div class="mt-1 text-white">
-                                <p>Reached $10M in assets under management</p>
-                                <p class="mt-2 text-gray-300">Won "Best New Trading Platform" at Crypto Awards</p>
-                            </div>
-                        </div>
-                        <div class="relative pl-10 group animate-fade-in-delayed">
-                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
-                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2020</div>
-                            <div class="mt-1 text-white">
-                                <p>Expanded team to 25 professionals</p>
-                                <p class="mt-2 text-gray-300">Launched mobile apps for iOS and Android</p>
-                            </div>
-                        </div>
-                        <div class="relative pl-10 group animate-fade-in-delayed">
-                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
-                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2021</div>
-                            <div class="mt-1 text-white">
-                                <p>Surpassed 10,000 active users</p>
-                                <p class="mt-2 text-gray-300">Achieved ISO 27001 security certification</p>
-                            </div>
-                        </div>
-                        <div class="relative pl-10 group animate-fade-in-delayed">
-                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
                             <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2022</div>
                             <div class="mt-1 text-white">
-                                <p>Reached $250M in assets under management</p>
-                                <p class="mt-2 text-gray-300">Opened offices in London and Singapore</p>
+                                <p>Platform reboot with focus on scalability</p>
+                                <p class="mt-2 text-gray-300">Rewrote core modules and improved latency by 50%</p>
+                            </div>
+                        </div>
+                        <div class="relative pl-10 group animate-fade-in-delayed">
+                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
+                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2023</div>
+                            <div class="mt-1 text-white">
+                                <p>Onboarded 1,000 new users organically</p>
+                                <p class="mt-2 text-gray-300">Partnered with 2 major fintech providers</p>
+                            </div>
+                        </div>
+                        <div class="relative pl-10 group animate-fade-in-delayed">
+                            <div class="absolute left-0 top-0 h-4 w-4 rounded-full bg-cyan-500 border-2 border-gray-700 group-hover:bg-cyan-400 transition-colors duration-300"></div>
+                            <div class="font-medium text-cyan-400 group-hover:text-cyan-300">2024</div>
+                            <div class="mt-1 text-white">
+                                <p>Surpassed 3,000 active users globally</p>
+                                <p class="mt-2 text-gray-300">Achieved $2.5M in managed crypto assets</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Management Team Section -->
         <div class="py-12 bg-gray-900">
@@ -193,25 +178,21 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                 </div>
                 <div class="mt-10 space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
                     <div class="relative bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700 text-center group transform transition-transform hover:scale-[1.02]">
-                        <img class="mx-auto h-40 w-40 rounded-full object-cover" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="John Smith">
                         <h3 class="mt-6 text-lg font-medium text-white">John Smith</h3>
                         <p class="mt-1 text-sm text-cyan-400">CEO & Founder</p>
                         <p class="mt-2 text-sm text-gray-300">15+ years in financial markets. Former hedge fund manager at Goldman Sachs.</p>
                     </div>
                     <div class="relative bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700 text-center group transform transition-transform hover:scale-[1.02]">
-                        <img class="mx-auto h-40 w-40 rounded-full object-cover" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="Sarah Johnson">
                         <h3 class="mt-6 text-lg font-medium text-white">Sarah Johnson</h3>
                         <p class="mt-1 text-sm text-cyan-400">CTO</p>
                         <p class="mt-2 text-sm text-gray-300">Blockchain expert. Led engineering teams at Coinbase and Binance.</p>
                     </div>
                     <div class="relative bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700 text-center group transform transition-transform hover:scale-[1.02]">
-                        <img class="mx-auto h-40 w-40 rounded-full object-cover" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" alt="Michael Chen">
                         <h3 class="mt-6 text-lg font-medium text-white">Michael Chen</h3>
                         <p class="mt-1 text-sm text-cyan-400">Head of Trading</p>
                         <p class="mt-2 text-sm text-gray-300">Quantitative analyst specializing in crypto trading algorithms.</p>
                     </div>
-                    <div class="relative bg-gray-800/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700 text-center group transform transition-transform hover:scale-[1.02]">
-                        <img class="mx-auto h-40 w-40 rounded-full object-cover" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80" alt="Grace Lee">
+                    <div class="relative bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg border border-gray-700 text-center group transform transition-transform hover:scale-[1.02]">
                         <h3 class="mt-6 text-lg font-medium text-white">Grace Lee</h3>
                         <p class="mt-1 text-sm text-cyan-400">CFO</p>
                         <p class="mt-2 text-sm text-gray-300">Expert in financial strategy. Previously led engineering at Stripe</p>
@@ -241,12 +222,6 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                         <div class="p-6 pt-8">
                             <h3 class="text-lg font-medium text-white">Financial Conduct Authority</h3>
                             <p class="mt-2 text-base text-gray-300">Authorized payment institution in the UK (FRN: 123456)</p>
-                            <div class="mt-4 flex items-center text-sm text-cyan-400">
-                                <span>View License</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </div>
                         </div>
                     </div>
 
@@ -260,12 +235,6 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                         <div class="p-6 pt-8">
                             <h3 class="text-lg font-medium text-white">Monetary Authority of Singapore</h3>
                             <p class="mt-2 text-base text-gray-300">Licensed under the Payment Services Act for digital payment token services</p>
-                            <div class="mt-4 flex items-center text-sm text-cyan-400">
-                                <span>View License</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </div>
                         </div>
                     </div>
 
@@ -279,12 +248,6 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                         <div class="p-6 pt-8">
                             <h3 class="text-lg font-medium text-white">ISO 27001 Certified</h3>
                             <p class="mt-2 text-base text-gray-300">Certified for information security management systems</p>
-                            <div class="mt-4 flex items-center text-sm text-cyan-400">
-                                <span>View Certificate</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </div>
                         </div>
                     </div>
                 </div>
