@@ -174,6 +174,9 @@ const clearPhotoFileInput = () => {
                         A new verification link has been sent to your email address.
                     </div>
                 </div>
+                <div class="text-md mt-4 dark:text-white">
+                    referral Code: {{ $page.props.auth.user.referral_code }}
+                </div>
             </div>
         </template>
 

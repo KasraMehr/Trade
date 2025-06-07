@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepositController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\WithdrawRequestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,12 +36,10 @@ Route::get('/invest', function () {
     return Inertia::render('Invest');
 })->name('Invest');
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/deposits', [DepositController::class, 'store'])->name('deposits.store');
+    Route::post('/deposits/{id}/process', [DepositController::class, 'process'])->name('deposits.process');
+    Route::post('/withdrawals', [WithdrawRequestController::class, 'store'])->name('withdrawals.store');
+    Route::post('/withdrawals/{id}/process', [WithdrawRequestController::class, 'process'])->name('withdrawals.process');
+    Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');});

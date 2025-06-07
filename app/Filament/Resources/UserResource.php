@@ -63,6 +63,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
+                TextColumn::make('referral_code')->label('Referral')->searchable(),
                 TextColumn::make('name')->label('Name')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
                 TextColumn::make('created_at')->label('Registered Date')->dateTime('Y/m/d')->sortable(),

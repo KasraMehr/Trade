@@ -14,8 +14,8 @@ class FirstUserSeeder extends Seeder
     {
 
                   $user = User::create([
-                      'name' => 'kasra',
-                      'email' => 'kasramehrali3@gmail.com',
+                      'name' => 'Grace',
+                      'email' => 'abc123@gmail.com',
                       'password' => Hash::make('12345678'), // پسورد رو حتما تغییر بده
                       'role' => 'admin',
                       'referral_code' => '333333',

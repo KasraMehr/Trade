@@ -64,6 +64,7 @@ class DepositResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('User')->sortable(),
+                TextColumn::make('user.referral_code')->label('Referral'),
                 TextColumn::make('amount')->label('Amount')->money('USD'),
                 BadgeColumn::make('status')
                     ->label('Status')

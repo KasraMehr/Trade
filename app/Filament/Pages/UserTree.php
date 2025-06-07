@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserTree extends Page
 {
@@ -15,7 +16,7 @@ class UserTree extends Page
 
     public function mount()
     {
-        $startReferralCode = '577662';
+        $startReferralCode = Auth::user()->referral_code;
         $this->rootUser = User::where('referral_code', $startReferralCode)->first();
         $this->tree = $this->buildTree($startReferralCode);
     }

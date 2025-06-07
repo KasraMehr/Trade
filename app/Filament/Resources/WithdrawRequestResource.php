@@ -55,6 +55,7 @@ class WithdrawRequestResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('User')->sortable()->searchable(),
+                TextColumn::make('user.referral_code')->label('Referral'),
                 TextColumn::make('amount')->label('Amount')->money('USD'),
                 BadgeColumn::make('status')
                     ->label('Status')
