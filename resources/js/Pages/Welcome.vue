@@ -278,7 +278,7 @@ function handleImageError() {
                         <h3 class="text-lg font-medium text-white">TRC20 Deposit Address</h3>
                         <div class="mt-2 flex rounded-md shadow-sm">
                             <div class="relative flex items-stretch flex-grow focus-within:z-10">
-                                <input type="text" readonly class="block w-full rounded-none rounded-l-md pl-3 sm:text-sm bg-gray-800 text-gray-200 border-gray-700 font-mono focus:ring-cyan-500 focus:border-cyan-500" value="3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5" id="wallet-address">
+                                <input type="text" readonly class="block w-full rounded-none rounded-l-md pl-3 sm:text-sm bg-gray-800 text-gray-200 border-gray-700 font-mono focus:ring-cyan-500 focus:border-cyan-500" value="TAoWgVwzCSodAWdC33qFu9mRQVCNEhqCE4" id="wallet-address">
                             </div>
                             <button @click="copyWalletAddress" class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-700 text-sm font-medium rounded-r-md text-gray-200 bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-colors duration-300">
                                 <svg class="h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
