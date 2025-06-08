@@ -2,6 +2,10 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+defineProps({
+    title: String,
+});
+
 const londonTime = ref('');
 const showMobileMenu = ref(false);
 
@@ -33,7 +37,7 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-    <Head title="Home" />
+    <Head :title="title" />
     <div class="min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
         <!-- Navigation -->
         <nav class="bg-gray-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50">

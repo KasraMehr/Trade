@@ -115,8 +115,7 @@ function handleImageError() {
 </style>
 
 <template>
-    <Head title="Home" />
-    <MainLayout>
+    <MainLayout title="Home">
         <!-- Hero Section -->
         <div class="relative bg-gradient-to-r from-indigo-900 via-blue-900 to-indigo-900 overflow-hidden">
             <div class="absolute inset-0">

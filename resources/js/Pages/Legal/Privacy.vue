@@ -4,8 +4,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 </script>
 
 <template>
-    <Head title="Privacy Policy" />
-    <MainLayout>
+    <MainLayout title="Privacy Policy">
 
       <div>
         <div class="privacy-policy p-8 max-w-5xl mx-auto leading-relaxed text-gray-400">

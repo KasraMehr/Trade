@@ -4,8 +4,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 </script>
 
 <template>
-    <Head title="About Us" />
-    <MainLayout>
+    <MainLayout title="About Us">
         <!-- Hero Section -->
         <div class="relative bg-gradient-to-r from-indigo-900 via-blue-900 to-indigo-900 overflow-hidden">
             <div class="absolute inset-0 opacity-10">

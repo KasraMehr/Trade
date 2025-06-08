@@ -43,7 +43,7 @@ class WithdrawRequestResource extends Resource
                     ->label('Status')
                     ->options([
                         'pending' => 'Pending',
-                        'approved' => 'Approved',
+                        'accepted' => 'Accepted',
                         'rejected' => 'Rejected',
                     ])
                     ->required(),

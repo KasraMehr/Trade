@@ -25,7 +25,6 @@ const props = defineProps({
 const depositModalOpen = ref(false);
 const withdrawModalOpen = ref(false);
 const ticketModalOpen = ref(false);
-const chartRange = ref('30');
 const transactionType = ref('all');
 const transactionPeriod = ref('7');
 const selectedDepositAmount = ref(100);
@@ -282,7 +281,7 @@ onMounted(() => {
             <!-- محتوای داشبورد -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <!-- خلاصه وضعیت -->
-                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
                     <!-- موجودی کیف پول -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
@@ -308,32 +307,30 @@ onMounted(() => {
                     </div>
 
                     <!-- سود کلی -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
-                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                    </svg>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total profit</dt>
-                                    <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(totalProfit) }}</div>
-                                        <div class="ml-2 flex items-baseline text-sm font-medium text-green-600">
-                                            <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.
-
-414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                            </svg>
-                                            <span class="sr-only">Increased by</span>
-                                            {{ profitPercentage }}%
-                                        </div>
-                                    </dd>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">-->
+<!--                        <div class="px-4 py-5 sm:p-6">-->
+<!--                            <div class="flex items-center">-->
+<!--                                <div class="flex-shrink-0 bg-green-500 rounded-md p-3">-->
+<!--                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />-->
+<!--                                    </svg>-->
+<!--                                </div>-->
+<!--                                <div class="ml-5 w-0 flex-1">-->
+<!--                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total profit</dt>-->
+<!--                                    <dd class="flex items-baseline">-->
+<!--                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(totalProfit) }}</div>-->
+<!--                                        <div class="ml-2 flex items-baseline text-sm font-medium text-green-600">-->
+<!--                                            <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
+<!--                                                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />-->
+<!--                                            </svg>-->
+<!--                                            <span class="sr-only">Increased by</span>-->
+<!--                                            {{ profitPercentage }}%-->
+<!--                                        </div>-->
+<!--                                    </dd>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <!-- برداشت -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
@@ -394,12 +391,6 @@ onMounted(() => {
                     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 lg:col-span-2">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white">Investment performance</h3>
-                            <select v-model="chartRange" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                <option value="7">7 days ago</option>
-                                <option value="30">30 days ago</option>
-                                <option value="90">3 months ago</option>
-                                <option value="365">1 year ago</option>
-                            </select>
                         </div>
                         <div class="h-64">
                             <canvas class="w-full h-full"></canvas>
@@ -434,16 +425,14 @@ onMounted(() => {
                 </div>
 
                 <!-- تاریخچه تراکنش‌ها -->
-                <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
-                    <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Transaction history</h3>
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Transaction History</h3>
                         <div class="flex space-x-3">
                             <select v-model="transactionType" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 <option value="all">All transactions</option>
                                 <option value="deposit">Deposit</option>
                                 <option value="withdrawal">Withdraw</option>
-                                <option value="investment">Investment</option>
-                                <option value="profit">Profit</option>
                             </select>
                             <select v-model="transactionPeriod" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 <option value="7">7 days ago</option>
@@ -452,36 +441,84 @@ onMounted(() => {
                             </select>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+
+                    <!-- Desktop Table -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full divide-y divide-gray-100 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                <th scope="col" class="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                                <th scope="col" class="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                                <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
+                                <th scope="col" class="px-5 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-5 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
                             </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                            <tr v-for="transaction in filteredTransactions" :key="transaction.id">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ transaction.id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                    <span :class="getTransactionTypeClass(transaction.type)">{{ getTransactionTypeText(transaction.type) }}</span>
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <td class="px-5 py-4 whitespace-nowrap text-sm font-medium text-gray-700 dark:text-gray-200">{{ transaction.id }}</td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm">
+                                    <span :class="transaction.type === 'deposit' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'"
+                                          class="px-2.5 py-1 rounded-full text-xs font-medium">
+                                        {{ getTransactionTypeText(transaction.type) }}
+                                    </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${{ formatNumber(transaction.amount) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                    <span :class="getStatusClass(transaction.status)">{{ getStatusText(transaction.status) }}</span>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-right font-medium" :class="transaction.type === 'deposit' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+                                    {{ transaction.type === 'deposit' ? '+' : '-' }}${{ formatNumber(transaction.amount) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ formatDate(transaction.date) }}</td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm">
+                                    <span :class="{
+                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': transaction.status === 'accepted',
+                                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': transaction.status === 'rejected',
+                                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': transaction.status === 'pending'
+                                    }" class="px-2.5 py-1 rounded-full text-xs font-medium">
+                                        {{ getStatusText(transaction.status) }}
+                                    </span>
+                                </td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-right text-gray-500 dark:text-gray-400">{{ formatDate(transaction.date) }}</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 text-right">
-                        <a href="#" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-sm font-medium">
-                            View all transactions
-                        </a>
+
+                    <!-- Mobile Cards -->
+                    <div class="md:hidden space-y-3 p-4">
+                        <div v-for="transaction in filteredTransactions" :key="transaction.id" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-xs">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span :class="transaction.type === 'deposit' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'"
+                                          class="px-2.5 py-1 rounded-full text-xs font-medium mb-2 inline-block">
+                                        {{ getTransactionTypeText(transaction.type) }}
+                                    </span>
+                                    <p class="text-sm font-medium text-gray-700 dark:text-gray-200">ID: {{ transaction.id }}</p>
+                                </div>
+                                <span :class="{
+                                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': transaction.status === 'accepted',
+                                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': transaction.status === 'rejected',
+                                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': transaction.status === 'pending'
+                                }" class="px-2.5 py-1 rounded-full text-xs font-medium">
+                                    {{ getStatusText(transaction.status) }}
+                                </span>
+                            </div>
+
+                            <div class="mt-3 flex justify-between items-center">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ formatDate(transaction.date) }}</p>
+                                <p class="text-sm font-medium" :class="transaction.type === 'deposit' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+                                    {{ transaction.type === 'deposit' ? '+' : '-' }}${{ formatNumber(transaction.amount) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div v-if="filteredTransactions.length === 0" class="p-8 text-center">
+                        <div class="mx-auto w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-1">No transactions found</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Try adjusting your filters</p>
                     </div>
                 </div>
 

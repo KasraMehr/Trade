@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BalanceLog extends Model
 {
-    protected $fillable = ['user_id', 'amount', 'type', 'description'];
+    protected $fillable = ['user_id', 'amount', 'type', 'status', 'description'];
 
     public function user(): BelongsTo
     {

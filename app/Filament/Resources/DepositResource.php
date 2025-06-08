@@ -45,7 +45,7 @@ class DepositResource extends Resource
                     ->label('Status')
                     ->options([
                         'pending'   => 'Pending',
-                        'confirmed' => 'Confirmed',
+                        'accepted' => 'Accepted',
                         'rejected'  => 'Rejected',
                     ])
                     ->required(),

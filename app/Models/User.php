@@ -74,12 +74,12 @@ class User extends Authenticatable
 
     public function referrer()
     {
-        return $this->belongsTo(User::class, 'referrer_id');
+        return $this->belongsTo(User::class, 'referred_by');
     }
 
     public function referrals()
     {
-        return $this->hasMany(User::class, 'referrer_id');
+        return $this->hasMany(User::class, 'referral_code');
     }
 
     protected static function booted()

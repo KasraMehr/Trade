@@ -48,6 +48,12 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255),
 
+                TextInput::make('phone_number')
+                    ->label('Phone Number')
+                    ->tel()
+                    ->required()
+                    ->maxLength(255),
+
                 TextInput::make('password')
                     ->label('Password')
                     ->password()
@@ -55,8 +61,35 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn($state) => !empty($state) ? Hash::make($state) : null)
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(string $context): bool => $context === 'create'),
+
+                Select::make('role')
+                    ->label('Role')
+                    ->options([
+                        'admin' => 'Admin',
+                        'investor' => 'Investor',
+                    ])
+                    ->default('investor')
+                    ->required(),
+
+                TextInput::make('referral_code')
+                    ->label('Referral Code')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+
+                TextInput::make('referred_by')
+                    ->label('Referred By')
+                    ->maxLength(255)
+                    ->nullable(),
+
+                TextInput::make('balance')
+                    ->label('Balance')
+                    ->numeric()
+                    ->default(5)
+                    ->required(),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {

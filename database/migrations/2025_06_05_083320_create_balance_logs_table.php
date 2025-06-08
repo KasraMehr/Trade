@@ -15,7 +15,8 @@ return new class extends Migration
           $table->id();
           $table->foreignId('user_id')->constrained()->onDelete('cascade');
           $table->decimal('amount', 16, 2);
-          $table->enum('type', ['deposit', 'withdrawal', 'trade_gain', 'trade_loss']);
+          $table->enum('type', ['deposit', 'withdrawal']);
+          $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
           $table->text('description')->nullable();
           $table->timestamps();
       });

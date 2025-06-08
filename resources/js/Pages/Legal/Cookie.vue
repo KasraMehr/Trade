@@ -4,8 +4,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 </script>
 
 <template>
-    <Head title="Cookie Policy" />
-    <MainLayout>
+    <MainLayout title="Cookie Policy">
         <div class="cookie-policy p-8 max-w-5xl mx-auto leading-relaxed text-gray-400">
             <div class="text-4xl text-gray-200 font-bold mb-6">Cookie Policy</div>
 
