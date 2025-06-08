@@ -16,13 +16,13 @@ class FirstUserSeeder extends Seeder
                   $user = User::create([
                       'name' => 'Grace',
                       'email' => 'abc123@gmail.com',
-                      'password' => Hash::make('12345678'), // پسورد رو حتما تغییر بده
+                      'phone_number' => '09123456789',
+                      'password' => Hash::make('12345678'),
                       'role' => 'admin',
                       'referral_code' => '333333',
                       'referred_by' => '333333',
                   ]);
 
-                  // ساخت تیم شخصی برای این یوزر
                   Team::create([
                       'user_id' => $user->id,
                       'name' => $user->name . "'s Team",
