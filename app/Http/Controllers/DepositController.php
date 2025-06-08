@@ -21,9 +21,10 @@ class DepositController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
         }
 
         $user = Auth::user();
@@ -35,8 +36,12 @@ class DepositController extends Controller
             'payment_proof' => $request->payment_proof
         ]);
 
-        return redirect()->back()->with('success', 'Deposit request submitted successfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Deposit request submitted successfully'
+        ]);
     }
+
 
     public function process(Request $request, $id)
     {

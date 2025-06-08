@@ -20,9 +20,10 @@ class TicketController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
         }
 
         $attachmentPath = null;
@@ -39,6 +40,9 @@ class TicketController extends Controller
             'status' => 'open'
         ]);
 
-        return redirect()->back()->with('success', 'Ticket submitted successfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Ticket submitted successfully'
+        ]);
     }
 }

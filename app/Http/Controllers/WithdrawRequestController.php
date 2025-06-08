@@ -15,29 +15,37 @@ class WithdrawRequestController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:10'
+            'amount' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first() // یا همه رو بفرست
+            ], 422);
         }
 
         $user = Auth::user();
 
         if ($user->balance < $request->amount) {
-            return redirect()->back()->with('error', 'Insufficient balance');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Insufficient balance'
+            ], 400);
         }
 
-        $withdraw = WithdrawRequest::create([
+        WithdrawRequest::create([
             'user_id' => $user->id,
             'amount' => $request->amount,
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Withdrawal request submitted successfully');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Withdrawal request submitted successfully'
+        ]);
     }
+
 
     public function process(Request $request, $id)
     {
