@@ -51,7 +51,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
                         <div class="ml-16">
                             <h3 class="text-lg font-medium text-white">Our Story</h3>
                             <p class="mt-2 text-base text-gray-300">
-                                Founded in 2018, FINVERO started with a vision to simplify crypto trading. Now, we serve thousands globally with cutting-edge technology and expert strategies.
+                                Founded in 2022, FINVERO started with a vision to simplify crypto trading. Now, we serve thousands globally with cutting-edge technology and expert strategies.
                             </p>
                         </div>
                     </div>
