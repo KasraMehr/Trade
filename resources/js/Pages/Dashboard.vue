@@ -1,8 +1,11 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import axios from 'axios';
-import {ref, watch, onMounted, computed} from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { Chart, registerables } from 'chart.js';
+import { toast } from 'vue3-toastify'
+import Swal from 'sweetalert2';
+
 Chart.register(...registerables);
 
 // Props ارسالی از کنترلر
@@ -20,17 +23,21 @@ const props = defineProps({
 
 // متغیرهای reactive
 const depositModalOpen = ref(false);
+const withdrawModalOpen = ref(false);
 const ticketModalOpen = ref(false);
 const chartRange = ref('30');
 const transactionType = ref('all');
 const transactionPeriod = ref('7');
 const selectedDepositAmount = ref(100);
 const customDepositAmount = ref('');
+const selectedWithdrawAmount = ref(100);
+const customWithdrawAmount = ref('');
 const selectedPaymentMethod = ref('crypto');
 const ticketSubject = ref('');
 const ticketDepartment = ref('support');
 const ticketMessage = ref('');
 const depositAmounts = [50, 100, 200, 500, 1000, 5000];
+const withdrawAmounts = [50, 100, 200, 500, 1000, 5000];
 const paymentMethods = [
     { id: 'crypto', name: 'Digital Currency' }
 ];
@@ -96,17 +103,73 @@ const selectDepositAmount = (amount) => {
 
 const processDeposit = async () => {
     const amount = customDepositAmount.value || selectedDepositAmount.value;
+
     try {
-        await axios.post(route('deposits.store'), {
+        const response = await axios.post(route('deposits.store'), {
             amount,
             payment_method: selectedPaymentMethod.value
         });
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.data.message || 'Deposit request submitted successfully'
+        });
+
         closeDepositModal();
     } catch (error) {
-        console.error(error);
+        const message =
+            error.response?.data?.message ||
+            'There was a problem processing the deposit. Please try again.';
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message
+        });
     }
 };
 
+const openWithdrawModal = () => {
+    withdrawModalOpen.value = true;
+};
+
+const closeWithdrawModal = () => {
+    withdrawModalOpen.value = false;
+};
+
+const selectWithdrawAmount = (amount) => {
+    selectedWithdrawAmount.value = amount;
+};
+
+const processWithdraw = async () => {
+    const amount = customWithdrawAmount.value || selectedWithdrawAmount.value;
+
+    try {
+        const response = await axios.post(route('withdrawals.store'), {
+            amount,
+            payment_method: selectedPaymentMethod.value
+        });
+
+        await Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.data.message || 'Withdrawal request submitted successfully'
+        });
+
+        closeWithdrawModal();
+    } catch (error) {
+        const message =
+            error.response?.data?.message ||
+            'There was a problem processing the withdrawal. Please try again.';
+
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message
+        });
+    }
+};
 
 const openTicketModal = () => {
     ticketModalOpen.value = true;
@@ -121,26 +184,37 @@ const closeTicketModal = () => {
 
 const submitTicket = async () => {
     if (!ticketSubject.value || !ticketMessage.value) {
-        alert('Please enter the subject and text of the ticket');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Missing fields',
+            text: 'Please enter the subject and text of the ticket.'
+        });
         return;
     }
 
     try {
-        await axios.post(route('tickets.store'), {
+        const response = await axios.post(route('tickets.store'), {
             subject: ticketSubject.value,
             department: ticketDepartment.value,
             message: ticketMessage.value
         });
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.data.message || 'Ticket submitted successfully!'
+        });
+
         closeTicketModal();
     } catch (error) {
-        console.error('Ticket submission failed:', error);
-        alert('There was a problem submitting the ticket. Please try again.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.response?.data?.message || 'There was a problem submitting the ticket. Please try again.'
+        });
     }
 };
 
-// const joinTrading = () => {
-//     Inertia.visit('/trading');
-// };
 
 const formatNumber = (num) => {
     return parseFloat(num).toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -246,9 +320,11 @@ onMounted(() => {
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total profit</dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(totalProfit) }}</div>
-                                        <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                                        <div class="ml-2 flex items-baseline text-sm font-medium text-green-600">
                                             <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.
+
+414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                             </svg>
                                             <span class="sr-only">Increased by</span>
                                             {{ profitPercentage }}%
@@ -259,26 +335,26 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <!-- سرمایه‌گذاری فعال -->
+                    <!-- برداشت -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
                             <div class="flex items-center">
-                                <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
                                     <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2m0-2V7" />
                                     </svg>
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Active investments</dt>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Withdraw funds</dt>
                                     <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(activeInvestments) }}</div>
+                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(walletBalance) }}</div>
                                     </dd>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <a :href="route('dashboard')" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Capital management
-                                </a>
+                                <button @click="openWithdrawModal" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Withdraw now
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -296,7 +372,7 @@ onMounted(() => {
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Recent tickets</dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ recentTickets }}</div>
-                                        <div class="ml-2 flex items-baseline text-sm font-semibold text-red-600" v-if="unreadTickets > 0">
+                                        <div class="ml-2 flex items-baseline text-sm font-medium text-red-600" v-if="unreadTickets > 0">
                                             <span class="sr-only">Unread tickets</span>
                                             {{ unreadTickets }} New
                                         </div>
@@ -353,9 +429,6 @@ onMounted(() => {
                                     </div>
                                 </div>
                             </div>
-<!--                            <button @click="joinTrading" class="w-full mt-4 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">-->
-<!--                                Participate in trading-->
-<!--                            </button>-->
                         </div>
                     </div>
                 </div>
@@ -478,62 +551,51 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- مودال ارسال تیکت -->
-                    <div v-if="ticketModalOpen" class="fixed z-10 inset-0 overflow-y-auto">
-                        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                                <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
-                            </div>
-                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"></span>
-                            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-                                <div>
-                                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-                                        <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                                        </svg>
-                                    </div>
-                                    <div class="mt-3 text-center sm:mt-5">
-                                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Submit New Ticket</h3>
-                                        <div class="mt-2">
-                                            <div class="mt-4">
-                                                <label for="ticketSubject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-                                                <input v-model="ticketSubject" type="text" id="ticketSubject" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                            </div>
-                                            <div class="mt-4">
-                                                <label for="ticketDepartment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Department</label>
-                                                <select v-model="ticketDepartment" id="ticketDepartment" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                    <option value="support">Support</option>
-                                                    <option value="technical">Technical</option>
-                                                    <option value="financial">Finance</option>
-                                                    <option value="investment">Investment</option>
-                                                </select>
-                                            </div>
-                                            <div class="mt-4">
-                                                <label for="ticketMessage" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-                                                <textarea v-model="ticketMessage" id="ticketMessage" rows="4" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                                            </div>
-                                            <div class="mt-4">
-                                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Attachment</label>
-                                                <div class="mt-2 flex items-center">
-                                                    <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
-                                                      <svg class="h-full w-full text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                                                        <path d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                      </svg>
-                                                    </span>
-                                                    <button type="button" class="ml-5 bg-white dark:bg-gray-700 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                        Select File
-                                                    </button>
+                <!-- مودال برداشت -->
+                <div v-if="withdrawModalOpen" class="fixed z-10 inset-0 overflow-y-auto">
+                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
+                        </div>
+                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"></span>
+                        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div>
+                                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                                    <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2m0-2V7" />
+                                    </svg>
+                                </div>
+                                <div class="mt-3 text-center sm:mt-5">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Withdraw Funds</h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Select the desired withdrawal amount</p>
+                                        <div class="mt-4 grid grid-cols-3 gap-3">
+                                            <button v-for="amount in withdrawAmounts" :key="amount" @click="selectWithdrawAmount(amount)" :class="{'bg-red-600 text-white': selectedWithdrawAmount === amount, 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': selectedWithdrawAmount !== amount}" class="py-2 px-4 rounded-md text-sm font-medium">
+                                                ${{ amount }}
+                                            </button>
+                                        </div>
+                                        <div class="mt-4">
+                                            <label for="customWithdrawAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Or enter a custom amount</label>
+                                            <input v-model="customWithdrawAmount" type="number" id="customWithdrawAmount" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+                                        </div>
+                                        <div class="mt-4">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment method</label>
+                                            <div class="mt-2 space-y-2">
+                                                <div v-for="method in paymentMethods" :key="method.id" class="flex items-center">
+                                                    <input :id="'withdraw-' + method.id" v-model="selectedPaymentMethod" :value="method.id" type="radio" class="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300">
+                                                    <label :for="'withdraw-' + method.id" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ method.name }}</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                                    <button @click="submitTicket" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
-                                        Submit Ticket
+                                    <button @click="processWithdraw" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm">
+                                        Withdraw
                                     </button>
-                                    <button @click="closeTicketModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                                    <button @click="closeWithdrawModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:col-start-1 sm:text-sm">
                                         Cancel
                                     </button>
                                 </div>
@@ -541,7 +603,69 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
+
+                <!-- مودال ارسال تیکت -->
+                <div v-if="ticketModalOpen" class="fixed z-10 inset-0 overflow-y-auto">
+                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
+                        </div>
+                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"></span>
+                        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div>
+                                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                                    <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                    </svg>
+                                </div>
+                                <div class="mt-4">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Submit New Ticket</h3>
+                                <div class="mt-2">
+                                    <div class="mt-4">
+                                        <label for="ticketSubject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
+                                        <input v-model="ticketSubject" type="text" id="ticketSubject" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+                                    <div class="mt-4">
+                                        <label for="ticketDepartment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Department</label>
+                                        <select v-model="ticketDepartment" id="ticketDepartment" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                            <option value="support">Support</option>
+                                            <option value="technical">Technical</option>
+                                            <option value="financial">Finance</option>
+                                            <option value="investment">Investment</option>
+                                        </select>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label for="ticketMessage" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+                                        <textarea v-model="ticketMessage" id="ticketMessage" rows="4" class="mt-1 block w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                                    </div>
+                                    <div class="mt-4">
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Attachment</label>
+                                        <div class="mt-2 flex items-center">
+                                                <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700">
+                                                  <svg class="h-full w-full text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                  </svg>
+                                                </span>
+                                            <button type="button" class="ml-5 bg-white dark:bg-gray-700 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Select File
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                                <button @click="submitTicket" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                                    Submit Ticket
+                                </button>
+                                <button @click="closeTicketModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
         </div>
     </AppLayout>
 </template>
