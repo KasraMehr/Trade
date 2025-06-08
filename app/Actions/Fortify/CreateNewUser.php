@@ -24,6 +24,7 @@ class CreateNewUser implements CreatesNewUsers
          Validator::make($input, [
              'name' => ['required', 'string', 'max:255'],
              'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+             'phone_number' => ['required', 'string', 'max:15', 'unique:users', 'regex:/[0-9]/'],
              'password' => $this->passwordRules(),
              'referred_by' => ['required', 'string', 'max:10', 'exists:users,referral_code'],
              'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
@@ -37,6 +38,7 @@ class CreateNewUser implements CreatesNewUsers
              return tap(User::create([
                  'name' => $input['name'],
                  'email' => $input['email'],
+                 'phone_number' =>$input['phone_number'],
                  'password' => Hash::make($input['password']),
                  'referred_by' => !empty($input['referred_by']) ? $input['referred_by'] : null,
              ]), function (User $user) {
