@@ -38,4 +38,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/deposits/{id}/process', [DepositController::class, 'process'])->name('deposits.process');
     Route::post('/withdrawals', [WithdrawRequestController::class, 'store'])->name('withdrawals.store');
     Route::post('/withdrawals/{id}/process', [WithdrawRequestController::class, 'process'])->name('withdrawals.process');
-    Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');});
+    Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+});
