@@ -11,6 +11,7 @@ Chart.register(...registerables);
 // Props ارسالی از کنترلر
 const props = defineProps({
     walletBalance: String,
+    lockedBalance: String,
     totalProfit: String,
     profitPercentage: Number,
     activeInvestments: String,
@@ -18,6 +19,7 @@ const props = defineProps({
     unreadTickets: Number,
     activeTrades: Array,
     transactions: Array,
+    activeInvestment: Object,
     flash: Object // برای پیام‌های موفقیت و خطا
 });
 
@@ -39,6 +41,16 @@ const depositAmounts = [50, 100, 200, 500, 1000, 5000];
 const withdrawAmounts = [50, 100, 200, 500, 1000, 5000];
 const paymentMethods = [
     { id: 'crypto', name: 'Digital Currency' }
+];
+const investmentModalOpen = ref(false);
+const selectedInvestmentAmount = ref(70);
+const customInvestmentAmount = ref('');
+const selectedPlan = ref('basic');
+const plans = [
+    { id: 'basic', name: 'Basic', min: 70 },
+    { id: 'gold', name: 'Gold', min: 500 },
+    { id: 'platinum', name: 'Platinum', min: 2000 },
+    { id: 'professional', name: 'Professional', min: 10000 }
 ];
 
 // نمودار
@@ -80,6 +92,36 @@ watch(() => props.flash, (flash) => {
     }
 });
 
+// Plan durations (mirroring config/investment_plans.php)
+const planDurations = {
+    basic: 25,
+    gold: 28,
+    platinum: 33,
+    professional: 39
+};
+
+// Computed properties for investment details
+const investmentDetails = computed(() => {
+    if (!props.activeInvestment || !props.activeInvestment.plan) return null;
+
+    const { principal, current_amount, days_remaining } = props.activeInvestment;
+
+    // Parse principal and current_amount, removing commas
+    const principalNum = parseFloat(principal.replace(/,/g, '')) || 0;
+    const currentAmountNum = parseFloat(current_amount.replace(/,/g, '')) || 0;
+
+    // Calculate profit
+    const profit = (currentAmountNum - principalNum).toFixed(2);
+
+    // Ensure days_remaining is an integer
+    const daysRemainingInt = Math.floor(parseFloat(days_remaining) || 0);
+
+    return {
+        profit,
+        days_remaining: daysRemainingInt
+    };
+});
+
 // توابع
 const copyWalletAddress = () => {
     const walletAddress = document.getElementById('wallet-address');
@@ -109,7 +151,7 @@ const processDeposit = async () => {
             payment_method: selectedPaymentMethod.value
         });
 
-        Swal.fire({
+        await Swal.fire({
             icon: 'success',
             title: 'Success',
             text: response.data.message || 'Deposit request submitted successfully'
@@ -121,7 +163,51 @@ const processDeposit = async () => {
             error.response?.data?.message ||
             'There was a problem processing the deposit. Please try again.';
 
-        Swal.fire({
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message
+        });
+    }
+};
+
+const openInvestmentModal = () => {
+    investmentModalOpen.value = true;
+};
+
+const closeInvestmentModal = () => {
+    investmentModalOpen.value = false;
+    customInvestmentAmount.value = '';
+};
+
+const selectPlan = (planId) => {
+    selectedPlan.value = planId;
+    selectedInvestmentAmount.value = plans.find(p => p.id === planId).min;
+};
+
+const processInvestment = async () => {
+    const amount = customInvestmentAmount.value || selectedInvestmentAmount.value;
+    try {
+        const response = await axios.post(route('investments.store'), {
+            amount,
+            plan: selectedPlan.value
+        });
+
+        await Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: response.data.message || 'Invest was successful'
+        });
+
+        closeInvestmentModal();
+    } catch (error) {
+        console.error('Investment failed:', error);
+
+        const message =
+            error.response?.data?.message ||
+            'There was a problem processing the Invest. Please try again.';
+
+        await Swal.fire({
             icon: 'error',
             title: 'Error',
             text: message
@@ -281,7 +367,7 @@ onMounted(() => {
             <!-- محتوای داشبورد -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <!-- خلاصه وضعیت -->
-                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
                     <!-- موجودی کیف پول -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
@@ -306,32 +392,55 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <!-- سود کلی -->
-<!--                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">-->
-<!--                        <div class="px-4 py-5 sm:p-6">-->
-<!--                            <div class="flex items-center">-->
-<!--                                <div class="flex-shrink-0 bg-green-500 rounded-md p-3">-->
-<!--                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />-->
-<!--                                    </svg>-->
-<!--                                </div>-->
-<!--                                <div class="ml-5 w-0 flex-1">-->
-<!--                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total profit</dt>-->
-<!--                                    <dd class="flex items-baseline">-->
-<!--                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">${{ formatNumber(totalProfit) }}</div>-->
-<!--                                        <div class="ml-2 flex items-baseline text-sm font-medium text-green-600">-->
-<!--                                            <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">-->
-<!--                                                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />-->
-<!--                                            </svg>-->
-<!--                                            <span class="sr-only">Increased by</span>-->
-<!--                                            {{ profitPercentage }}%-->
-<!--                                        </div>-->
-<!--                                    </dd>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!-- Invest -->
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                        <!-- Days remaining badge in corner -->
+                        <div v-if="activeInvestment" class="absolute top-0 right-0">
+        <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-semibold bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+            {{ investmentDetails.days_remaining }} Days Left
+        </span>
+                        </div>
 
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-gradient-to-br from-green-400 to-blue-600 rounded-md p-3">
+                                    <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Locked Investment</dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900 dark:text-white">
+                                            ${{ formatNumber(lockedBalance) }}
+                                        </div>
+                                        <template v-if="activeInvestment">
+                                            <div class="ml-2 flex items-center text-green-600 dark:text-green-400">
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                                </svg>
+                                                <span class="text-sm font-semibold">
+                                +${{ formatNumber(investmentDetails.profit) }}
+                            </span>
+                                            </div>
+                                        </template>
+                                    </dd>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <template v-if="!activeInvestment">
+                                    <button @click="openInvestmentModal" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        Start Investment
+                                    </button>
+                                </template>
+                                <template v-else>
+                                    <div class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600">
+                                        {{ activeInvestment.plan.toUpperCase() }}
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
                     <!-- برداشت -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
@@ -468,7 +577,7 @@ onMounted(() => {
                                 </td>
                                 <td class="px-5 py-4 whitespace-nowrap text-sm">
                                     <span :class="{
-                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': transaction.status === 'accepted',
+                                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': (transaction.status === 'accepted' || transaction.status === 'completed'),
                                         'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': transaction.status === 'rejected',
                                         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': transaction.status === 'pending'
                                     }" class="px-2.5 py-1 rounded-full text-xs font-medium">
@@ -583,6 +692,98 @@ onMounted(() => {
                                     </button>
                                     <button @click="closeDepositModal" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
                                         Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Modal -->
+                <!-- Investment Modal -->
+                <div v-if="investmentModalOpen" class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <!-- Overlay with gradient backdrop -->
+                        <div class="fixed inset-0 bg-gradient-to-br from-gray-900/70 to-gray-900/50 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+
+                        <!-- Modal container -->
+                        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full overflow-hidden">
+                            <!-- Header with gradient -->
+                            <div class="bg-gradient-to-r from-green-500 to-blue-600 p-6 text-center">
+                                <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-white/10 backdrop-blur-sm">
+                                    <svg class="h-7 w-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-bold text-white" id="modal-title">Start New Investment</h3>
+                                <p class="mt-1 text-green-100 text-sm">Choose your investment strategy</p>
+                            </div>
+
+                            <!-- Modal content -->
+                            <div class="px-6 py-5">
+                                <!-- Plan selection -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Investment Plan</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <button
+                                            v-for="plan in plans"
+                                            :key="plan.id"
+                                            @click="selectPlan(plan.id)"
+                                            :class="{
+                                                'ring-2 ring-green-500 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200': selectedPlan === plan.id,
+                                                'bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200': selectedPlan !== plan.id
+                                            }"
+                                            class="py-3 px-4 rounded-lg border border-gray-200 dark:border-gray-600 text-sm font-semibold transition-all duration-200"
+                                        >
+                                            <span class="block font-bold">{{ plan.name }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Amount input -->
+                                <div class="mt-6">
+                                    <label for="investmentAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Investment Amount ($)</label>
+                                    <div class="relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 dark:text-gray-400">$</span>
+                                        </div>
+                                        <input
+                                            v-model="customInvestmentAmount"
+                                            type="number"
+                                            id="investmentAmount"
+                                            :min="plans.find(p => p.id === selectedPlan)?.min || 0"
+                                            class="block w-full pl-7 pr-12 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                                            :placeholder="'Min: $' + (plans.find(p => p.id === selectedPlan)?.min || 0)"
+                                        >
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <span class="text-gray-500 dark:text-gray-400 text-xs">USD</span>
+                                        </div>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        Available balance: ${{ formatNumber(userBalance) }}
+                                    </p>
+                                </div>
+
+                                <!-- Action buttons -->
+                                <div class="mt-8 grid grid-cols-2 gap-3">
+                                    <button
+                                        @click="closeInvestmentModal"
+                                        type="button"
+                                        class="w-full py-3 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 font-medium transition-colors duration-200"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        @click="processInvestment"
+                                        type="button"
+                                        :disabled="!selectedPlan || !customInvestmentAmount"
+                                        :class="{
+                                            'bg-green-600 hover:bg-green-700': selectedPlan && customInvestmentAmount,
+                                            'bg-gray-400 cursor-not-allowed': !selectedPlan || !customInvestmentAmount
+                                        }"
+                                        class="w-full py-3 px-4 rounded-lg text-white font-medium transition-colors duration-200"
+                                    >
+                                        Confirm Investment
                                     </button>
                                 </div>
                             </div>

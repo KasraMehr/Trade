@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investment;
 use App\Models\User;
 use App\Models\Deposit;
 use App\Models\WithdrawRequest;
@@ -90,15 +91,29 @@ class DashboardController extends Controller
                 ];
             });
 
+        $activeInvestment = Investment::where('user_id', $user->id)
+            ->where('status', 'active')
+            ->first();
+
         return Inertia::render('Dashboard', [
             'walletBalance' => number_format($walletBalance, 2, '.', ''),
+            'lockedBalance' => number_format($user->locked_balance, 2, '.', ''),
             'totalProfit' => number_format($totalProfit, 2, '.', ''),
             'profitPercentage' => $profitPercentage,
             'activeInvestments' => number_format($activeInvestments, 2, '.', ''),
             'recentTickets' => $recentTickets,
             'unreadTickets' => $unreadTickets,
             'activeTrades' => $activeTrades,
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'activeInvestment' => $activeInvestment ? [
+                'id' => $activeInvestment->id,
+                'plan' => $activeInvestment->plan,
+                'principal' => number_format($activeInvestment->principal, 2, '.', ''),
+                'current_amount' => number_format($activeInvestment->current_amount, 2, '.', ''),
+                'started_at' => $activeInvestment->started_at->toDateTimeString(),
+                'days_remaining' => config('investment_plans.plans.' . $activeInvestment->plan)['duration_days'] - now()->diffInDays($activeInvestment->started_at),
+                'profit' => number_format($activeInvestment->current_amount - $activeInvestment->principal, 2, '.', '')
+            ] : null,
         ]);
     }
 }

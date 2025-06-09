@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -38,6 +39,7 @@ class User extends Authenticatable
         'balance'
     ];
 
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -57,6 +59,7 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'available_balance'
     ];
 
     /**
@@ -91,5 +94,20 @@ class User extends Authenticatable
 
             $user->referral_code = $code;
         });
+    }
+
+    public function balanceLogs(): HasMany
+    {
+        return $this->hasMany(BalanceLog::class);
+    }
+
+    public function investments(): HasMany
+    {
+        return $this->hasMany(Investment::class);
+    }
+
+    public function getAvailableBalanceAttribute()
+    {
+        return $this->balance - $this->locked_balance;
     }
 }

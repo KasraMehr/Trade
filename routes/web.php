@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\Team\ReferralTreeController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\WithdrawRequestController;
@@ -39,6 +40,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/deposits/{id}/process', [DepositController::class, 'process'])->name('deposits.process');
     Route::post('/withdrawals', [WithdrawRequestController::class, 'store'])->name('withdrawals.store');
     Route::post('/withdrawals/{id}/process', [WithdrawRequestController::class, 'process'])->name('withdrawals.process');
+    Route::post('/investments', [InvestmentController::class, 'store'])->name('investments.store');
     Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     Route::get('/team/referral-tree', [ReferralTreeController::class, 'index'])->name('team.referral-tree');
 
